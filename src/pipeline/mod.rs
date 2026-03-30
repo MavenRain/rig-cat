@@ -4,7 +4,7 @@
 //! steps using `Io::flat_map`.  Each step is an `Io<Error, _>`,
 //! composed via monadic sequencing.
 
-use std::rc::Rc;
+use std::sync::Arc;
 
 use comp_cat_rs::effect::io::Io;
 
@@ -19,21 +19,21 @@ use crate::vector_store::{SearchResult, VectorStoreIndex};
 /// This is the canonical Retrieval-Augmented Generation pattern,
 /// expressed as a single `Io::flat_map` chain.
 ///
-/// Takes `Rc`-wrapped references so the closures can capture
+/// Takes `Arc`-wrapped references so the closures can capture
 /// them across `flat_map` boundaries without `'static` ownership issues.
-#[allow(clippy::needless_pass_by_value)] // Rc's are moved into 'static closures
+#[allow(clippy::needless_pass_by_value)] // Arc's are moved into 'static closures
 pub fn rag<M, E, V>(
     query: String,
-    model: Rc<M>,
-    embedder: Rc<E>,
-    store: Rc<V>,
+    model: Arc<M>,
+    embedder: Arc<E>,
+    store: Arc<V>,
     preamble: Option<String>,
     top_k: usize,
 ) -> Io<Error, String>
 where
-    M: CompletionModel + 'static,
-    E: EmbeddingModel + 'static,
-    V: VectorStoreIndex + 'static,
+    M: CompletionModel + Send + Sync + 'static,
+    E: EmbeddingModel + Send + Sync + 'static,
+    V: VectorStoreIndex + Send + Sync + 'static,
 {
     let embed_io = embedder.embed(EmbeddingRequest::single(query.clone()));
     embed_io.flat_map(move |embeddings| {

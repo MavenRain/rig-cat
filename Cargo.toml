@@ -8,7 +8,7 @@ keywords = ["llm", "agent", "category-theory", "effects", "ai"]
 categories = ["science", "rust-patterns"]
 
 [dependencies]
-comp-cat-rs = "0.4"
+comp-cat-rs = "0.5"
 ureq = { version = "3", features = ["json"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
