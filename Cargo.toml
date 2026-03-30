@@ -1,6 +1,6 @@
 [package]
 name = "rig-cat"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 description = "LLM agent framework built on comp-cat-rs: typed effects, no async, categorical foundations"
 license = "MIT"
@@ -8,7 +8,7 @@ keywords = ["llm", "agent", "category-theory", "effects", "ai"]
 categories = ["science", "rust-patterns"]
 
 [dependencies]
-comp-cat-rs = "0.2"
+comp-cat-rs = "0.4"
 ureq = { version = "3", features = ["json"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
